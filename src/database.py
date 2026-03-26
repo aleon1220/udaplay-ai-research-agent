@@ -73,7 +73,7 @@ class GameDatabase:
             logger.warning(f"Data directory '{data_dir}' does not exist.")
             return documents
             
-        for file_path in data_path.glob("*.json"):
+        for file_path in data_path.rglob("*.json"):
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
@@ -99,16 +99,16 @@ class GameDatabase:
         """
         # Basic formatting, assuming standard fields like title, release_date, etc.
         # This can be adjusted based on the actual JSON structure.
-        title = doc.get("title", doc.get("name", "Unknown Title"))
-        desc = doc.get("description", doc.get("summary", ""))
-        release_date = doc.get("release_date", "Unknown Date")
-        platforms = doc.get("platforms", [])
+        title = doc.get("title", doc.get("Name", doc.get("name", "Unknown Title")))
+        desc = doc.get("description", doc.get("Description", doc.get("summary", "")))
+        release_date = doc.get("release_date", doc.get("YearOfRelease", "Unknown Date"))
+        platforms = doc.get("platforms", doc.get("Platform", []))
         if isinstance(platforms, list):
             platforms_str = ", ".join(platforms)
         else:
             platforms_str = str(platforms)
             
-        publisher = doc.get("publisher", "Unknown Publisher")
+        publisher = doc.get("publisher", doc.get("Publisher", "Unknown Publisher"))
         
         formatted_text = f"Title: {title}\nRelease Date: {release_date}\nPlatforms: {platforms_str}\nPublisher: {publisher}\nDescription: {desc}"
         return formatted_text
