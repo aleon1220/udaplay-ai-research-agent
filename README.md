@@ -14,7 +14,7 @@ UdaPlay is a stateful AI Research Agent designed for a gaming analytics company.
 1. **Install Dependencies:**
    Ensure you have Python installed, then install the required packages:
    ```bash
-   pip install chromadb openai pydantic python-dotenv tavily-python langgraph langchain langchain-openai pyyaml jupyter
+   pip install -r requirements.txt
    ```
 
 2. **Environment Variables:**
