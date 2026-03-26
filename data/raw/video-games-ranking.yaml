@@ -1,0 +1,90 @@
+- Name: Gran Turismo
+  Platform: PlayStation 1
+  Genre: Racing
+  Publisher: Sony Computer Entertainment
+  Description: A realistic racing simulator featuring a wide array of cars and tracks, setting a new standard for the genre.
+  YearOfRelease: 1997
+- Name: Grand Theft Auto: San Andreas
+  Platform: PlayStation 2
+  Genre: Action-adventure
+  Publisher: Rockstar Games
+  Description: An expansive open-world game set in the fictional state of San Andreas, following the story of Carl 'CJ' Johnson.
+  YearOfRelease: 2004
+- Name: Gran Turismo 5
+  Platform: PlayStation 3
+  Genre: Racing
+  Publisher: Sony Computer Entertainment
+  Description: A comprehensive racing simulator featuring a vast selection of vehicles and tracks, with realistic driving physics.
+  YearOfRelease: 2010
+- Name: Marvel's Spider-Man
+  Platform: PlayStation 4
+  Genre: Action-adventure
+  Publisher: Sony Interactive Entertainment
+  Description: An open-world superhero game that lets players swing through New York City as Spider-Man, battling iconic villains.
+  YearOfRelease: 2018
+- Name: Marvel's Spider-Man 2
+  Platform: PlayStation 5
+  Genre: Action-adventure
+  Publisher: Sony Interactive Entertainment
+  Description: The sequel to the acclaimed Spider-Man game, featuring both Peter Parker and Miles Morales as playable characters.
+  YearOfRelease: 2023
+- Name: Pokémon Gold and Silver
+  Platform: Game Boy Color
+  Genre: Role-playing
+  Publisher: Nintendo
+  Description: Second-generation Pokémon games introducing new regions, Pokémon, and gameplay mechanics.
+  YearOfRelease: 1999
+- Name: Pokémon Ruby and Sapphire
+  Platform: Game Boy Advance
+  Genre: Role-playing
+  Publisher: Nintendo
+  Description: Third-generation Pokémon games set in the Hoenn region, featuring new Pokémon and double battles.
+  YearOfRelease: 2002
+- Name: Super Mario World
+  Platform: Super Nintendo Entertainment System (SNES)
+  Genre: Platformer
+  Publisher: Nintendo
+  Description: A classic platformer where Mario embarks on a quest to save Princess Toadstool and Dinosaur Land from Bowser.
+  YearOfRelease: 1990
+- Name: Super Mario 64
+  Platform: Nintendo 64
+  Genre: Platformer
+  Publisher: Nintendo
+  Description: A groundbreaking 3D platformer that set new standards for the genre, featuring Mario's quest to rescue Princess Peach.
+  YearOfRelease: 1996
+- Name: Super Smash Bros. Melee
+  Platform: GameCube
+  Genre: Fighting
+  Publisher: Nintendo
+  Description: A crossover fighting game featuring characters from various Nintendo franchises battling it out in dynamic arenas.
+  YearOfRelease: 2001
+- Name: Wii Sports
+  Platform: Wii
+  Genre: Sports
+  Publisher: Nintendo
+  Description: A collection of sports games that utilize the Wii's motion controls, bundled with the console to showcase its capabilities.
+  YearOfRelease: 2006
+- Name: Mario Kart 8 Deluxe
+  Platform: Nintendo Switch
+  Genre: Racing
+  Publisher: Nintendo
+  Description: An enhanced version of Mario Kart 8, featuring new characters, tracks, and improved gameplay mechanics.
+  YearOfRelease: 2017
+- Name: Kinect Adventures!
+  Platform: Xbox 360
+  Genre: Party
+  Publisher: Microsoft Game Studios
+  Description: A collection of mini-games designed to showcase the capabilities of the Kinect motion sensor.
+  YearOfRelease: 2010
+- Name: Minecraft
+  Platform: Xbox One
+  Genre: Sandbox, Survival
+  Publisher: Mojang Studios
+  Description: A sandbox game that allows players to build and explore infinite worlds, fostering creativity and adventure.
+  YearOfRelease: 2014
+- Name: Halo Infinite
+  Platform: Xbox Series X|S
+  Genre: First-person shooter
+  Publisher: Xbox Game Studios
+  Description: The latest installment in the Halo franchise, featuring Master Chief's return in a new open-world setting.
+  YearOfRelease: 2021
