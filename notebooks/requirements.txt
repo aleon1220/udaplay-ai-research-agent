@@ -4,6 +4,7 @@ pydantic>=2.11.3
 python-dotenv>=1.1.0
 tavily-python>=0.5.4
 langgraph
+langchain_core
 langchain
 langchain-openai
 pyyaml
