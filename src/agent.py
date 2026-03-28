@@ -1,4 +1,6 @@
 import logging
+from typing import List, Dict, Any, Sequence, Annotated
+from pydantic import BaseModel, Field, ConfigDict
 import operator
 from typing import Annotated, Sequence, TypedDict, Dict, Any, List
 
@@ -6,6 +8,7 @@ from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 from langgraph.graph import StateGraph, END
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
+
 
 from src.tools import retrieve_game, evaluate_retrieval, game_web_search, persist_web_search_results
 
@@ -21,9 +24,20 @@ class AgentState(TypedDict):
     structured_response: Dict[str, Any]
 
 # --- Define the Output Schema ---
+# now OpenAI is more strict some tweakings happening here.
+class Fact(BaseModel):
+    # This explicitly tells OpenAI that no other fields are allowed
+    model_config = ConfigDict(extra="forbid") 
+    
+    attribute: str = Field(description="The specific attribute or entity being extracted.")
+    value: str = Field(description="The extracted value for that attribute.")
+
 class FinalAnswerResponse(BaseModel):
-    natural_language_answer: str = Field(description="The final answer in clear natural language, with citations.")
-    structured_data: Dict[str, Any] = Field(description="The extracted game data in structured JSON format.")
+    # Lock down the parent model as well
+    model_config = ConfigDict(extra="forbid") 
+    
+    natural_language_answer: str = Field(description="Answer in clear natural language, includes citations.")
+    structured_data: List[Fact] = Field(description="A comprehensive list of extracted facts from the context.")
 
 # --- Define Nodes ---
 def retrieve_node(state: AgentState):
@@ -74,6 +88,7 @@ def generate_answer_node(state: AgentState):
     
     history_str = "\n".join([f"{msg.type}: {msg.content}" for msg in chat_history]) if chat_history else "No previous history."
     
+    # previously doing extraction to a JSON file
     prompt = f"""
     You are UdaPlay, an expert AI Research Agent for a gaming analytics company.
     Answer the user's question based on the provided context.
@@ -88,7 +103,8 @@ def generate_answer_node(state: AgentState):
     
     User Question: {question}
     
-    Provide the answer in natural language AND extract the key facts into structured JSON.
+    Provide the answer in natural language. THEN, extract the key facts into the structured_data list.
+    Each item in structured_data must be a specific fact with an 'attribute' name and its corresponding 'value'.
     """
     
     response = structured_llm.invoke(prompt)
