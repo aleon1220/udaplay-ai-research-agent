@@ -115,6 +115,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+notebooks/udacity_udaplay_agent/
 .env
 .venv
 env/

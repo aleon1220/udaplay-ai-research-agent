@@ -17,17 +17,17 @@ UdaPlay is a stateful AI Research Agent designed for a gaming analytics company.
 cd notebooks
 ```
 
-- enable the virtual enfv
+- enable the virtual environment
 ```powershell
 python -m venv udacity_udaplay_agent
 ```
 
 2. Activate environment
 ```powershell
-.\udacity_udaplay_agent\Scripts\activate.bat
+.\udacity_udaplay_agent\Scripts\Activate.ps1
 ```
 
-3. Set up the app dependencies
+3. Set up the app dependencies by installing python packages
 ```powershell
 python -m pip install -r requirements.txt
 ```
@@ -38,14 +38,8 @@ op inject -i .env.tpl -o .env
 ```
 
 ### Check dependencies
-1. **Install Dependencies:**
-   Ensure you have Python installed, then install the required packages:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Environment Variables:**
-   check the `.env` file in the root directory and add your API keys:
+- **Environment Variables:**
+   check the generated `.env` file in the root directory and add your API keys:
    ```env
    OPENAI_API_KEY=your_openai_api_key_here
    TAVILY_API_KEY=your_tavily_api_key_here
