@@ -34,7 +34,7 @@ python -m pip install -r requirements.txt
 
 4. inject secrets to a target directory
 ```powershell
-op inject -i .env.tpl -o ./udacity_udaplay_agent/.env
+op inject -i .env.tpl -o .env
 ```
 
 ### Check dependencies
