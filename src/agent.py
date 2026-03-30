@@ -6,6 +6,7 @@ from typing import Annotated, Sequence, TypedDict, Dict, Any, List
 
 from langchain_core.messages import BaseMessage, HumanMessage, AIMessage
 from langgraph.graph import StateGraph, END
+from langgraph.checkpoint.memory import MemorySaver
 from langchain_openai import ChatOpenAI
 from pydantic import BaseModel, Field
 
@@ -41,10 +42,37 @@ class FinalAnswerResponse(BaseModel):
 
 # --- Define Nodes ---
 def retrieve_node(state: AgentState):
-    """Node that attempts to answer using internal knowledge."""
+    """Node that attempts to answer using internal knowledge, contextualizing the question if history exists."""
     logger.info("Executing Node: retrieve_node")
     question = state["question"]
-    context = retrieve_game(question)
+    chat_history = state.get("chat_history", [])
+    
+    # If there is history, we rewrite the question to be standalone for better retrieval
+    if chat_history:
+        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+        history_str = "\n".join([f"{msg.type}: {msg.content}" for msg in chat_history[-5:]]) # Use last 5 messages
+        
+        rewrite_prompt = f"""
+        Given the following chat history and a follow-up question, rephrase the follow-up question to be a standalone question that can be used to search a database.
+        
+        Chat History:
+        {history_str}
+        
+        Follow-up Question: {question}
+        
+        Standalone Question:"""
+        
+        try:
+            standalone_question = llm.invoke(rewrite_prompt).content.strip()
+            logger.info(f"Rewritten question for retrieval: '{standalone_question}'")
+            search_query = standalone_question
+        except Exception as e:
+            logger.error(f"Failed to rewrite question: {e}")
+            search_query = question
+    else:
+        search_query = question
+
+    context = retrieve_game(search_query)
     return {"context": context}
 
 def evaluate_node(state: AgentState):
@@ -127,7 +155,7 @@ def should_web_search(state: AgentState):
         return "web_search"
 
 # --- Build the Graph ---
-def build_graph():
+def build_graph(checkpointer=None):
     workflow = StateGraph(AgentState)
     
     # Add nodes
@@ -153,43 +181,41 @@ def build_graph():
     workflow.add_edge("web_search", "generate_answer")
     workflow.add_edge("generate_answer", END)
     
-    return workflow.compile()
+    return workflow.compile(checkpointer=checkpointer)
 
 # --- Agent Interface ---
 class UdaPlayAgent:
     """
-    Stateful AI Research Agent that maintains conversation context across multiple queries.
+    Stateful AI Research Agent that maintains conversation context across multiple queries using session IDs.
     """
     def __init__(self):
-        self.graph = build_graph()
-        self.chat_history: List[BaseMessage] = []
+        self.checkpointer = MemorySaver()
+        self.graph = build_graph(checkpointer=self.checkpointer)
         
-    def invoke(self, question: str) -> Dict[str, Any]:
+    def invoke(self, question: str, session_id: str = "default_session") -> Dict[str, Any]:
         """
-        Invokes the agent workflow with a user question.
+        Invokes the agent workflow with a user question and session ID.
         
         Args:
             question (str): The user's query.
+            session_id (str): The unique identifier for the conversation session.
             
         Returns:
             Dict[str, Any]: The final state of the workflow containing the answer and structured response.
         """
-        logger.info(f"\n--- Processing Query: '{question}' ---")
+        logger.info(f"\n--- Processing Query: '{question}' (Session: {session_id}) ---")
+        
+        config = {"configurable": {"thread_id": session_id}}
+        
         initial_state = {
             "question": question,
-            "chat_history": self.chat_history,
             "context": "",
             "retrieval_sufficient": False,
             "final_answer": "",
             "structured_response": {}
         }
         
-        result = self.graph.invoke(initial_state)
-        
-        # Update internal chat history with the newly generated messages
-        self.chat_history.extend([
-            HumanMessage(content=question), 
-            AIMessage(content=result["final_answer"])
-        ])
+        result = self.graph.invoke(initial_state, config=config)
         
         return result
+
