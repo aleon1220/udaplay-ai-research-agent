@@ -1,48 +1,63 @@
-# udaplay-ai-research-agent
-Udacity exercise project. assistant called UdaPlay. Executives, analysts, and gamers want to ask natural language.
+# UdaPlay AI Research Agent
 
-## Getting Started
+UdaPlay is a stateful AI Research Agent designed for a gaming analytics company. It answers natural language questions about video games using a robust two-tier retrieval system (Local RAG + Web Search Fallback) and maintains conversation state across multiple queries.
 
-Instructions for how to get a copy of the project running on your local machine.
+## Features
+- **Local RAG Pipeline:** Ingests game data into a persistent ChromaDB vector store.
+- **Evaluated Web Fallback:** Uses an LLM as a judge to determine if internal database answers are sufficient; if not, it falls back to the Tavily Web Search API.
+- **Long-term Memory:** Automatically persists newly discovered web information into the local vector database for future queries.
+- **Stateful Conversations:** Built with LangGraph to maintain chat history and context across user sessions.
+- **Structured Output:** Returns answers in both readable natural language and structured JSON formats.
 
-### Dependencies
-
-```
-Examples here
-```
-
-### Installation
-
-Step by step explanation of how to get a dev environment running.
-
-List out the steps
-
-```
-Give an example here
+## Prerequisites & Setup
+### Create a Virtual Environment
+1. set up the virtual env with python module
+- go to directory
+```powershell
+cd notebooks
 ```
 
-## Testing
-
-Explain the steps needed to run any automated tests
-
-### Break Down Tests
-
-Explain what each test does and why
-
+- enable the virtual environment
+```powershell
+python -m venv udacity_udaplay_agent
 ```
-Examples here
+
+2. Activate environment
+```powershell
+.\udacity_udaplay_agent\Scripts\Activate.ps1
 ```
-## Project Instructions
 
-This section should contain all the student deliverables for this project.
+3. Set up the app dependencies by installing python packages
+```powershell
+python -m pip install -r requirements.txt
+```
 
-## Built With
+4. inject secrets to a target directory
+```powershell
+op inject -i .env.tpl -o .env
+```
 
-* [Item1](www.item1.com) - Description of item
-* [Item2](www.item2.com) - Description of item
-* [Item3](www.item3.com) - Description of item
+### Check dependencies
+- **Environment Variables:**
+   check the generated `.env` file in the root directory and add your API keys:
+   ```env
+   OPENAI_API_KEY=your_openai_api_key_here
+   TAVILY_API_KEY=your_tavily_api_key_here
+   ```
 
-Include all items used to build project.
+## Running the Project
+
+The project workflow is demonstrated step-by-step using Jupyter notebooks located in the `notebooks/` directory.
+
+### Step 1: Data Ingestion (RAG Setup)
+To initialize the vector database and load the raw game data:
+1. Open `notebooks/Udaplay_01_solution_project.ipynb` in your preferred notebook environment.
+2. Run all cells. This script will recursively parse the `data/raw/` directory, map properties to the internal structure, generate embeddings, and store them in the persistent `vector_db/` folder.
+
+### Step 2: Agent Execution & Testing
+To interact with the UdaPlay agent and test its semantic retrieval, web fallback, and conversational memory capabilities:
+1. Open `notebooks/Udaplay_02_solution_project.ipynb`.
+2. Run all cells. The execution logs will print the internal "thought process" (e.g., retrieving context, deciding if it's sufficient, triggering web searches) and output the final, structured answers.
 
 ## License
-[License](../LICENSE.md)
+[License](LICENSE)
